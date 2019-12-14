@@ -1,0 +1,73 @@
+Add
+
+GiveMoney(Player, INT ) 
+Usage: To give a player cash 
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~==~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~==~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
+
+Suported Function list:
+
+***Client side***
+AddMessage(player, Message)
+GetMessage(player)
+ClearMessages(player)
+
+***Client side Variables***
+
+"MissionID"
+Type: INT
+Usage: Negative one represents it is not active. When in usage the ID will automatically update
+When not longer in usage it will result back to -1.
+
+"Mission" 
+Type ARRAY
+Usage: To bind the main mission settings to its own function.
+	     MissionProgress().Mission.apply(function() {});
+WARNING: Under an experimental state. 
+"Mission" needs to be capable of holding unlimited generated mission functions. 
+During each completion that index function needs to be cleared
+
+"BonusTimeRate" 
+Type: INT
+Usage: Time added to inc the time on each checkpoint
+
+"GTA_ACTIVE"
+Type: BOOL
+Usage: Last check to see if the client is active or not
+
+"Checkpoint"
+Type: INT
+Usage: Starts at negative one. This is considered a checkpoint counter.
+We increase Checkpoint on each sphere/checkpoint created
+ 
+"MaxCheckpoint"
+Type: INT 
+Usage: This is used as a method to return the amount of checkpoints the player has
+to do. 
+  
+"CheckpointTime" 
+Type: INT
+Usage: Used as a time storage. 
+
+"CheckpointCash"
+Type: INT
+Usage: Used as a method to build up a cash precentage from each checkpoint.
+
+"SphereID"
+Type: INT
+Usage: An actual Sphere was created. Store the ID here
+Notes: Add array storrage. 
+  
+"Failed"
+Type: BOOL
+Usage: Base system will prepare to initiate the fail sequence to anything the player is doing.
+Function is universal and will reset and clear anything from memory.
+
+"FailTime"
+Type: INT
+Usage: Not always used. If the time isn't set the player isn't going to fail  
+
+"MessageInfo"
+Type ARRAY
+Usage: A place to dump a massive amount of mission messages
+Notes: Do not use! This belongs to client side messages system
+
