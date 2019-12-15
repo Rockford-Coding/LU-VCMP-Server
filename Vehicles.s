@@ -39,6 +39,18 @@ function onVehicleRespawn( VEHICLE ) {
     return 1;
   }
 }
+
+// LocateVehicle(Player.Vehicle)
+
+function GetVehicleInstance(vehicle) { 
+  // Test IDS of LocateVehicle( iD ) to actual vehicle ID
+  if (MultiPlayer == "Liberty Unleashed") {
+     return FindVehicle( vehicle.ID )
+  }
+  if (MultiPlayer == "Vice City MultiPlayer") {
+     return FindVehicle( vehicle.ID )
+  }
+}
 function LocateVehicle( iD ) { 
   // Getting the vehicle instance from the class
   local Vehicle = VehicleArray.find(iD);
