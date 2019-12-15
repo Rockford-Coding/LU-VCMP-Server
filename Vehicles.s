@@ -37,7 +37,7 @@ function onVehicleRespawn( VEHICLE ) {
   return 1;
 }
 
-function GetVehcleCount() { 
+function GetVehicleCount() { 
   if (MultiPlayer == "Liberty Unleashed") {
     local i = 0; 
     while(FindVehicle( i ) != null) { 
