@@ -222,30 +222,33 @@ ForceVehicleUsage <- class(player) {
       
       // Original method, Update. 
       // Add the vehicle ID
-      VehicleInfo.push(vehicleID);		  
-      local blip = ::CreateClientBlip( ::BLIP_COPCAR, vehicle.Pos )
+      VehicleInfo.push(vehicleID);
+      
+      // [Add universal blips: TODO]
+      local blip = ::CreateClientBlip(Player, ::BLIP_COPCAR, vehicle.Pos )
       BlimpInfo.push(blip.ID)  
-      SmallMessage( "Get in the car~r~!~p~... ", 40000 , 1 );
+      
+      // [Enable Message system: TODO]
+      ::SmallMessage(Player, "Get in the car~r~!~p~... ", 40000 , 1 );
     }
   }
  
-function ClearVehicle(vehicle) {
- foreach (key, value in VehicleInfo) {
-  if (vehicle.ID == VehicleInfo[key]) {
-    VehicleInfo.remove(key)
+  function ClearVehicle(vehicle) {
+    foreach (key, value in VehicleInfo) {
+      if (vehicle.ID == VehicleInfo[key]) {
+        VehicleInfo.remove(key)
+      }
+    } 
   }
- } 
-}
-  
-function SnagVehicleInfo(VEHICLE) {	  
-  foreach (key, value in VehicleInfo) {
-    // return the ID of the vehicle
-    if ( VehicleInfo[key] == VEHICLE.ID) return true;
+	
+  function SnagVehicleInfo(VEHICLE) {	  
+    foreach (key, value in VehicleInfo) {
+      // return the ID of the vehicle
+      if ( VehicleInfo[key] == VEHICLE.ID) return true;
+    }
+    // Anything else return false and skip in code
+    return false;
   }
-  // Anything else return false and skip in code
-  return false;
-}
-
 };
 
 //ForceVehicleUsageArray.insert(player.ID, ForceVehicleUsage)
@@ -255,14 +258,19 @@ function SnagVehicleInfo(VEHICLE) {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 
 // Three functions here. 
+// Move over to "ForceVehicleUsage"
 MissionInjectionParamaters <- [];
  MissionInjection <- function() { 
   foreach(IDX in MissionInjectionParamaters) {
-    local Type = MissionInjectionParamaters[0],
+    local 
+	Type = MissionInjectionParamaters[0],
+	  
 	x = MissionInjectionParamaters[1],
 	y = MissionInjectionParamaters[2],
-    z = MissionInjectionParamaters[3],
+        z = MissionInjectionParamaters[3],
+	
 	Time = MissionInjectionParamaters[4],
+	  
 	Model = MissionInjectionParamaters[5],
 	Reason = MissionInjectionParamaters[6];
   }
@@ -270,13 +278,14 @@ MissionInjectionParamaters <- [];
   ClearBlips(Player);
   ClearVehicle();
 
+  // Get in car function
   if (Type == "GetInCar") {
     Mission.apply(function(Type) {
-	// The time set for getting in the car
-    if (Time != null) SetPlayersTime(Time);
-	else SetPlayersTime(60); 
-    GetInCar = true;	  
-	});
+      // The time set for getting in the car
+      if (Time != null) SetPlayersTime(Time);
+      else SetPlayersTime(60); 
+      GetInCar = true;	  
+    });
   }
 		
   // Temp Mission settings
