@@ -162,6 +162,7 @@ ForceVehicleUsage <- class(player) {
     GetInCarTime = 0;
     GetInCarReason = "Drive To";
     GetInCarFailed = false;
+    VehicleInfo = [];
   }
   SetPlayersTime <- function(Time) {
     GetInCarTime = Time;
@@ -196,6 +197,39 @@ ForceVehicleUsage <- class(player) {
       }
     }
   }
+  EnableVehicle <- function(Player, Model) {
+    if (!Model) {
+      // Server wants a random car
+      // Create a function to find how many cars are in the server. for now use the server vehicles
+      local vehicleID = rand() % 245; // fair code for now
+      local vehicle = ::FindVehicle(vehicleID);
+      
+      // Original method, Update. 
+      // Add the vehicle ID
+      VehicleInfo.push(vehicleID);		  
+      local blip = ::CreateClientBlip( ::BLIP_COPCAR, vehicle.Pos )
+      BlimpInfo.push(blip.ID)  
+      SmallMessage( "Get in the car~r~!~p~... ", 40000 , 1 );
+    }
+  }
+ 
+function ClearVehicle(vehicle) {
+ foreach (key, value in VehicleInfo) {
+  if (vehicle.ID == VehicleInfo[key]) {
+    VehicleInfo.remove(key)
+  }
+ } 
+}
+  
+function SnagVehicleInfo(VEHICLE) {	  
+  foreach (key, value in VehicleInfo) {
+    // return the ID of the vehicle
+    if ( VehicleInfo[key] == VEHICLE.ID) return true;
+  }
+  // Anything else return false and skip in code
+  return false;
+}
+
 };
 
 //ForceVehicleUsageArray.insert(player.ID, ForceVehicleUsage)
@@ -470,35 +504,3 @@ function ClearBlips(Player) {
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 
-VehicleInfo = [];
-function EnableVehicle(Player, Model) { 
- if (!Model) {
-  // Server wants a random car
-  // Create a function to find how many cars are in the server. for now use the server vehicles
-  local vehicleID = rand() % 245; // fair code for now
-  local vehicle = ::FindVehicle(vehicleID);
-			
-  // Add the vehicle ID
-  VehicleInfo.push(vehicleID);		  
-  local blip = ::CreateClientBlip( ::BLIP_COPCAR, vehicle.Pos )
-  BlimpInfo.push(blip.ID)  
-  SmallMessage( "Get in the car~r~!~p~... ", 40000 , 1 );
- }
-}
- 
-function ClearVehicle(vehicle) {
- foreach (key, value in VehicleInfo) {
-  if (vehicle.ID == VehicleInfo[key]) {
-    VehicleInfo.remove(key)
-  }
- } 
-}
-  
-function SnagVehicleInfo(VEHICLE) {	  
-  foreach (key, value in VehicleInfo) {
-    // return the ID of the vehicle
-    if ( VehicleInfo[key] == VEHICLE.ID) return true;
-  }
-  // Anything else return false and skip in code
-  return false;
-}
