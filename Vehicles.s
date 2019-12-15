@@ -39,6 +39,14 @@ function onVehicleRespawn( VEHICLE ) {
     return 1;
   }
 }
+function LocateVehicle( iD ) { 
+  // Getting the vehicle instance from the class
+  local Vehicle = VehicleArray.find(iD);
+  if (Vehicle.STORAGE.ID == iD) { 
+    return Vehicle.STORAGE.ID;
+  }
+}
+  
 function GetVehicleCount() { 
   if (MultiPlayer == "Liberty Unleashed") {
     local i = 0; 
