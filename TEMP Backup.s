@@ -217,9 +217,8 @@ function Timer_() {
        // Mission Restart
        if (StartTime) {
          if (StartTime == 0) {
-		   // Next mission
-	       MissionInjectionParamaters = ["GetInCar", null, null, null, 95, null, "Theift"];
-           MissionInjection();
+            // Next mission
+            GTA_RESET()
          }
         StartTime--;
         SmallMessage("Failed, Restarting... " + StartTime, 1000 , 1 );
