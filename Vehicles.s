@@ -11,17 +11,18 @@ function AddVehicle(Model, x, y, z, angle) {
     VEHICLE.Angle = angle;  
   }
   
-  VehicleArray.insert(GetVehicleCount(), function(VEHICLE){
-    local 
-    CURRENT_HEALTH = VEHICLE.Health,
-    OLD_HEALTH = VEHICLE.Health,
-    Used = false,
-    ANGLE = VEHICLE.Angle,
-    iD = VEHICLE.ID,
+  VehicleArray.insert(GetVehicleCount(), class(VEHICLE){ 
+    constructor(Vehicle) {
+	 CURRENT_HEALTH = VEHICLE.Health;
+     OLD_HEALTH = VEHICLE.Health;
+     Used = false;
+     ANGLE = VEHICLE.Angle;
+     iD = VEHICLE.ID;
   
-    RESPAWN = true, // Add temp car settings to be able to delete them on respawn
-    REMOVE = true,
-    RESPAWNTIME = 10000;  
+     RESPAWN = true; // Add temp car settings to be able to delete them on respawn
+     REMOVE = true;
+     RESPAWNTIME = 10000; 
+	
   });
   
   return 1;
