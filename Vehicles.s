@@ -1,16 +1,4 @@
-MUNICIPAL_VEHICLE <- array(VEHICLE_LIMITS)
-
-class vehicles {
-  CURRENT_HEALTH = 1000;
-  OLD_HEALTH = 1000;
-  Used = false;
-  ANGLE = 0;
-  
-  RESPAWN = false; // Add temp car settings to be able to delete them on respawn
-  REMOVE = true;
-  RESPAWNTIME = 10000;
-  
-}
+local VehicleArray = [];
 
 function AddVehicle(Model, x, y, z, angle) {
   local VEHICLE;
@@ -22,13 +10,19 @@ function AddVehicle(Model, x, y, z, angle) {
 	VEHICLE = CreateVehicle( Model, 0, Vector(x, y, z), angle, -1, -1 )
     VEHICLE.Angle = angle;  
   }
-
-  // Store the vehicles health and angle
-  MUNICIPAL_VEHICLE[VEHICLE.ID] = vehicles();
-  MUNICIPAL_VEHICLE[VEHICLE.ID].OLD_HEALTH = VEHICLE.Health;
-  MUNICIPAL_VEHICLE[VEHICLE.ID].Health = VEHICLE.Health;
-  MUNICIPAL_VEHICLE[VEHICLE.ID].USED = false;
-  MUNICIPAL_VEHICLE[VEHICLE.ID].ANGLE = angle;
+  
+  VehicleArray.insert(GetVehicleCount(), function(VEHICLE){
+    local 
+    CURRENT_HEALTH = VEHICLE.Health,
+    OLD_HEALTH = VEHICLE.Health,
+    Used = false,
+    ANGLE = VEHICLE.Angle,
+    iD = VEHICLE.ID,
+  
+    RESPAWN = true, // Add temp car settings to be able to delete them on respawn
+    REMOVE = true,
+    RESPAWNTIME = 10000;  
+  });
   
   return 1;
 }
@@ -36,11 +30,10 @@ function AddVehicle(Model, x, y, z, angle) {
 
 function onVehicleRespawn( VEHICLE ) {
   VEHICLE.Locked = false;
-  MUNICIPAL_VEHICLE[VEHICLE.ID].USED = false;
   
-  MUNICIPAL_VEHICLE[VEHICLE.ID].OLD_HEALTH = VEHICLE.Health;
-  MUNICIPAL_VEHICLE[VEHICLE.ID].Health = VEHICLE.Health;
-  VEHICLE.Angle = MUNICIPAL_VEHICLE[VEHICLE.ID].ANGLE
+  local Vehicle = VehicleArray.find(VEHICLE.ID);
+  Vehicle.HEALTH = VEHICLE.Health;
+  Vehicle.ANGLE = VEHICLE.Angle;
   return 1;
 }
 
