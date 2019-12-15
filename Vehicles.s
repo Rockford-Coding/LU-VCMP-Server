@@ -35,7 +35,7 @@ function onVehicleRespawn( VEHICLE ) {
   local Vehicle = VehicleArray.find(VEHICLE.ID);
   if ( VEHILCE == Vehicle.STORAGE ) { 
     Vehicle.HEALTH = VEHICLE.Health;
-    Vehicle.ANGLE = VEHICLE.Angle;
+    VEHICLE.Angle = Vehicle.ANGLE;
     return 1;
   }
 }
