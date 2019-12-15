@@ -12,7 +12,7 @@ function AddVehicle(Model, x, y, z, angle) {
   }
   
   VehicleArray.insert(GetVehicleCount(), class(VEHICLE){ 
-    constructor(Vehicle) {
+    constructor(VEHICLE) {
      CURRENT_HEALTH = VEHICLE.Health;
      OLD_HEALTH = VEHICLE.Health;
      Used = false;
