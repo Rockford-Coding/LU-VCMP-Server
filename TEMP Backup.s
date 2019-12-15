@@ -176,6 +176,8 @@ MissionInjectionParamaters <- [];
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+
+// This method has to get updated
 function Timer_() {
   // Player 
   foreach(player in players) {
