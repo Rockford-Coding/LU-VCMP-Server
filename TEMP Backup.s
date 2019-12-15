@@ -10,22 +10,34 @@ else if (MultiPlayer == "Vice City MultiPlayer") {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+local GameModePlayerArray = [];  
+GameModePlayer <- class(player) { 
+    constructor(Player) {
+      MissionID = -1;
+      Mission = [];
+      BonusTimeRate = 0; // Time added to inc the time on each checkpoint
+      GTA_ACTIVE = false;
+  };
+};
 
-MissionID <- -1;
-Mission <- [];
-BonusTimeRate <- 0; // Time added to inc the time on each checkpoint
-GTA_ACTIVE <- false;
+//GameModePlayerArray.insert(player.ID, GameModePlayer)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-
-Checkpoint <- -1; // inc 
-MaxCheckpoint <- 0;
+local CheckpointPlayerArray = [];  
+CheckpointPlayer <- class(player) { 
+    constructor(Player) {
+      Checkpoint = -1; // inc 
+      MaxCheckpoint = 0;
   
-CheckpointTime <- 0;
-CheckpointCash <- 0;
-SphereID <- null;
+      CheckpointTime = 0;
+      CheckpointCash = 0;
+      SphereID = null;
+  };
+};
+
+//CheckpointPlayerArray.insert(player.ID, CheckpointPlayer)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
