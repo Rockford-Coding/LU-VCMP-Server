@@ -73,7 +73,7 @@ Date = "6/6/6";
 function FreezePlayer() { 
   Froze = true;
   FrozenTime = TIME;
-  //Data = date() sff domr formula
+  //Date = date() get time and date + add time to the formula
 }
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
