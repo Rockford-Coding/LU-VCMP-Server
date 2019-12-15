@@ -6,6 +6,11 @@
   print("Loaded LU modules");
 }
 
+// Same method for VCMP
+function onPlayerEnteredVehicle( player, vehicle, seat ) {
+  onVehicleEntered(player, vehicle );
+}
+
 // Add basic vehicles
 function LoadVehicle() { 
   AddVehicle(93, 899.685, -982.687, 5.63034, 91.0025);
@@ -255,8 +260,3 @@ function LoadVehicle() {
   AddVehicle(126, -1554.4, -935.005, 11.6648, 88.3801);
 }
 // Add basic vehicles
-
-function onPlayerEnteredVehicle( player, vehicle, seat ) {
-  onVehicleEntered(player, vehicle, seat );
-}
-
