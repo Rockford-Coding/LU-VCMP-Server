@@ -1,4 +1,4 @@
-// Part of a revision 
+// Re code each section, Moving back from client over to server
 if (MultiPlayer == "Liberty Unleashed") {
   ::Color <- function(R, G, B) { return Colour( R, G, B ); }
 };
