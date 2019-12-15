@@ -6,7 +6,7 @@ class vehicles {
   Used = false;
   ANGLE = 0;
   
-  RESPAWN = false;
+  RESPAWN = false; // Add temp car settings to be able to delete them on respawn
   REMOVE = true;
   RESPAWNTIME = 10000;
   
@@ -23,7 +23,9 @@ function AddVehicle(Model, x, y, z, angle) {
     VEHICLE.Angle = angle;  
   }
 
+  // Store the vehicles health and angle
   MUNICIPAL_VEHICLE[VEHICLE.ID] = vehicles();
+  MUNICIPAL_VEHICLE[VEHICLE.ID].OLD_HEALTH = VEHICLE.Health;
   MUNICIPAL_VEHICLE[VEHICLE.ID].Health = VEHICLE.Health;
   MUNICIPAL_VEHICLE[VEHICLE.ID].USED = false;
   MUNICIPAL_VEHICLE[VEHICLE.ID].ANGLE = angle;
@@ -41,7 +43,7 @@ function onVehicleRespawn( VEHICLE ) {
   VEHICLE.Angle = MUNICIPAL_VEHICLE[VEHICLE.ID].ANGLE
   return 1;
 }
- 
+
 function GetVehcleCount() { 
   if (MultiPlayer == "Liberty Unleashed") {
     local i = 0; 
