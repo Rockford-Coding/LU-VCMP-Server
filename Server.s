@@ -1,17 +1,10 @@
 print("The script has initiated");
- function RenameFunction(oldName, newName) {
+
+function RenameFunction(oldName, newName) {
     getroottable()[newName] <- getroottable()[oldName];
     getroottable().rawdelete(oldName);
 }
-/* 
-  Author James Rockford
-  Notes: Last minute re write. Im tired of manually adding methods. 
-  12/7/19
-  10:00 pm 
-*/
 
-//----------------------------------------------------------------
-// No need to explain what is here
 MultiPlayer <- "GTA"
 GAME_MODE <- "Grand Theft Auto";
  
