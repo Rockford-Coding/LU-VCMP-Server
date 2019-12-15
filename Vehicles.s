@@ -51,7 +51,7 @@ function GetVehcleCount() {
     return i; 
   }
   if (MultiPlayer == "Vice City MultiPlayer") {
-    local i = 0;
+    local i = 1;
     while(FindVehicle( i ) != null) { 
       i++;
     }
