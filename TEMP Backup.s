@@ -428,11 +428,10 @@ function EnableVehicle(Player, Model) {
  }
 }
  
-function ClearVehicle() {
+function ClearVehicle(vehicle) {
  foreach (key, value in VehicleInfo) {
-  local vehicle = ::FindVehicle(value)
-  if (vehicle) {
-    VehicleInfo.clear();
+  if (vehicle.ID == VehicleInfo[key]) {
+    VehicleInfo.remove(key)
   }
  } 
 }
