@@ -13,11 +13,11 @@ function AddVehicle(Model, x, y, z, angle) {
   
   VehicleArray.insert(GetVehicleCount(), class(VEHICLE){ 
     constructor(Vehicle) {
-	 CURRENT_HEALTH = VEHICLE.Health;
+     CURRENT_HEALTH = VEHICLE.Health;
      OLD_HEALTH = VEHICLE.Health;
      Used = false;
      ANGLE = VEHICLE.Angle;
-     iD = VEHICLE.ID;
+     STORAGE = VEHICLE;
   
      RESPAWN = true; // Add temp car settings to be able to delete them on respawn
      REMOVE = true;
@@ -33,11 +33,12 @@ function onVehicleRespawn( VEHICLE ) {
   VEHICLE.Locked = false;
   
   local Vehicle = VehicleArray.find(VEHICLE.ID);
-  Vehicle.HEALTH = VEHICLE.Health;
-  Vehicle.ANGLE = VEHICLE.Angle;
-  return 1;
+  if ( VEHILCE == Vehicle.STORAGE ) { 
+    Vehicle.HEALTH = VEHICLE.Health;
+    Vehicle.ANGLE = VEHICLE.Angle;
+    return 1;
+  }
 }
-
 function GetVehicleCount() { 
   if (MultiPlayer == "Liberty Unleashed") {
     local i = 0; 
