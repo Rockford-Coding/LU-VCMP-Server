@@ -47,7 +47,7 @@ GoToSphereTime = 0;
 
   SendToCheckpoint = false;
   SendToCheckpointTime = 0;
-  Active = false;
+  CheckpointActive = false;
   
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
@@ -70,10 +70,11 @@ CameraUsageTimer = 0;
 Froze = false;
 FrozenTime = 0;
 Date = "6/6/6";
-function FreezePlayer() { 
+function FreezePlayer(TIME) { 
   Froze = true;
+  Player.Frozen = true;
   FrozenTime = TIME;
-  //Date = date() get time and date + add time to the formula
+  //Date = date() get time and date + add time to the formula. Check on Timer_
 }
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
@@ -103,7 +104,6 @@ function ClearMessages() {
 // Mission System for Grand theft auto
 
 function GTA_RESET() { 
-  StartTime = 30;
   GetInCar = false;
   GetInCarTime = 0;
   SmallMessage("Completed, next... ", 3000, 1 );
@@ -112,6 +112,7 @@ function GTA_RESET() {
   MissionInjection();
 }
 
+// Enabled for GTA mission, Recode as a vehicle checker latter
 function GTA_GM(VEHICLE) {
   if (GTA_ACTIVE) { 
 
@@ -183,7 +184,15 @@ function Timer_() {
   foreach(player in players) {
    if (player) {
      if (player.Spawned) { 
-  	   
+	 
+       if (FrozenTime != 0) {
+	     SmallMessage("Frozen for " + FrozenTime, 1000 , 1 );
+         if (FrozenTime == 0) {
+           Froze = false;
+		   Player.Frozen = true;
+         }
+        FrozenTime--;
+       }  	   
 	   // Check for vehicle health changes
 	   onVehicleHealthChanges(player);
 	   
@@ -202,7 +211,7 @@ function Timer_() {
        // Mission Failed
        if (Failed) {
          if (FailTime == 0) {
-           
+           FreezePlayer(FrozenTime); // Pair with start time sequence. Most main functions arnt created yet
 		   // reset
 		   Failed = false;
            FailTime = 0;
@@ -215,7 +224,7 @@ function Timer_() {
        // Mission Failed
 
        // Mission Restart
-       if (StartTime) {
+       if (StartTime != 0) {
          if (StartTime == 0) {
             // Next mission
             GTA_RESET()
