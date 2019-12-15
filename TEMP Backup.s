@@ -18,6 +18,9 @@ GameModePlayer <- class(player) {
       BonusTimeRate = 0; // Time added to inc the time on each checkpoint
       GTA_ACTIVE = false;
   };
+  EnableMission <- function(iD, TimeRate) {
+    MissionID = iD;
+    BonusTimeRate += TimeRate;
 };
 
 //GameModePlayerArray.insert(player.ID, GameModePlayer)
@@ -42,111 +45,160 @@ CheckpointPlayer <- class(player) {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//  
+local FailedPlayerArray = [];  
+FailedPlayer <- class(player) { 
+    constructor(Player) {
+      Failed = false;
+      FailTime = 0;
+  };
+};
 
-Failed <- false;
-FailTime <- 0;
+//FailedPlayerArray.insert(player.ID, FailedPlayer)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+local GoToSpherePlayerArray = [];  
+GoToSpherePlayer <- class(player) { 
+    constructor(Player) {
+      GoToSphere = false;
+      GoToSphereTime = 0;
+  };
+};
 
-GoToSphere = false;
-GoToSphereTime = 0;
+//GoToSpherePlayerArray.insert(player.ID, GoToSpherePlayer)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+local SendToCheckpointPlayerArray = [];  
+SendToCheckpointPlayer <- class(player) { 
+    constructor(Player) {
+      SendToCheckpoint = false;
+      SendToCheckpointTime = 0;
+      CheckpointActive = false;
+  };
+};
 
-  SendToCheckpoint = false;
-  SendToCheckpointTime = 0;
-  CheckpointActive = false;
-  
+//SendToCheckpointPlayerArray.insert(player.ID, SendToCheckpointPlayer)
+
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 
 /*
-// Camera functions are not implimented in this version
-PointCameraToPlayer = false;
-PointCameraToPosition = [0, 0, 0];
-CameraPosition = [0, 0, 0];
-PointCameraToPlayerTimer = 0;
-  
-CameraUsage = false;
-CameraUsageTimer = 0;
+  Camera functions are not implimented in this version
 */
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-// END OF CODE, CHANGING OVER TO NEXT SECTION  //
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 
-Froze = false;
-FrozenTime = 0;
-Date = "6/6/6";
-function FreezePlayer(TIME) { 
-  Froze = true;
-  Player.Frozen = true;
-  FrozenTime = TIME;
-  //Date = date() get time and date + add time to the formula. Check on Timer_
-}
+local PointCameraToPlayerArray = [];  
+PointCameraTo <- class(player) { 
+    constructor(Player) {
+      PointCameraToPlayer = false;
+      PointCameraToPosition = [0, 0, 0];
+      CameraPosition = [0, 0, 0];
+      PointCameraToPlayerTimer = 0;
+  
+      CameraUsage = false;
+      CameraUsageTimer = 0;
+  };
+};
 
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-// END OF CODE, CHANGING OVER TO NEXT SECTION  //
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-
-MessageInfo <- [];
-MessageTime <- 0;
-MessageID <- 0;
-function AddMessage(Message) { 
-  MessageInfo.push(Message)
-} 
-
-function GetMessage() {  
-  SmallMessage(MessageInfo[MessageID], 1000 , 1 )
-}        
-
-function ClearMessages() {
-  MessageInfo.clear();
-}
-// End of message System for messages
+//PointCameraToPlayerArray.insert(player.ID, PointCameraTo)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-
-// Mission System for Grand theft auto
-
-function GTA_RESET() { 
-  GetInCar = false;
-  GetInCarTime = 0;
-  SmallMessage("Completed, next... ", 3000, 1 );
-  
-  MissionInjectionParamaters = ["GetInCar", null, null, null, 95, null, "Theift"];
-  MissionInjection();
-}
-
-// Enabled for GTA mission, Recode as a vehicle checker latter
-function GTA_GM(VEHICLE) {
-  if (GTA_ACTIVE) { 
-
-    // Obtain the mission vehicle [ID]
-    local GTA_VEHICLE = SnagVehicleInfo(VEHICLE);
-  
-    // Now compare the vehicle IDs
-    if(VEHICLE.ID == GTA_VEHICLE) { 
-  
-	GTA_RESET();
-	
-	// Random cash
-	/*PLAYER.Cash += 100;
-	PLAYER.Score = PLAYER.Cash;*/
-	
-
-	
-	GetOnlineRank();
-	FindRankPos( PLAYER );
-	}
+local FreezePlayerArray = [];  
+FreezePlayer <- class(player) { 
+  constructor(Player) {
+    Froze = false;
+    FrozenTime = 0;
+    Date = "6/6/6";
   }
-}
+};
+
+//FreezePlayerArray.insert(player.ID, FreezePlayer)
+
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+// END OF CODE, CHANGING OVER TO NEXT SECTION  //
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+local MessageInfoArray = [];  
+MessageInfo <- class(player) { 
+  constructor(Player) {
+    MessageStorage = [];
+    MessageTime = 0;
+    MessageID = 0;
+  }
+  
+  AddMessage <- function(Text) { 
+    MessageStorage.push(Text)
+  };
+  
+  GetMessage <- function() {  
+    SmallMessage(MessageInfo[MessageID], 1000 , 1 )
+  };
+  
+  ClearMessages <- function() {
+    MessageInfo.clear();
+  };
+  
+  Next_Message <- function(iD) {
+    MessageID += iD;
+  };
+  
+};
+
+//MessageInfoArray.insert(player.ID, MessageInfo)
+
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+// END OF CODE, CHANGING OVER TO NEXT SECTION  //
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+
+// Force Vehicle usage
+local ForceVehicleUsageArray = [];  
+ForceVehicleUsage <- class(player) { 
+  constructor(Player) {
+    GetInCar = false;
+    GetInCarTime = 0;
+    GetInCarReason = "Drive To";
+    GetInCarFailed = false;
+  }
+  SetPlayersTime <- function(Time) {
+    GetInCarTime = Time;
+    
+    // Pair the fail time
+    FailTime = Time; 
+  }
+  
+  GTA_RESET <- function(Player) {
+    GetInCar = false;
+    GetInCarTime = 0;
+    SmallMessage(Player, "Completed, next... ", 3000, 1 );
+  
+    MissionInjectionParamaters = ["GetInCar", null, null, null, 95, null, "Theift"];
+    MissionInjection();
+  }
+  
+  GTA_GM <- function(VEHICLE, PLAYER) {
+    if (GTA_ACTIVE) { 
+      // Obtain the mission vehicle [ID]
+      local GTA_VEHICLE = SnagVehicleInfo(VEHICLE);
+  
+      // Now compare the vehicle IDs
+      if(VEHICLE.ID == GTA_VEHICLE) { 
+        GTA_RESET();
+	// Random cash
+	PLAYER.Cash += 100;
+	PLAYER.Score = PLAYER.Cash;
+	
+	/*GetOnlineRank();
+	FindRankPos( PLAYER );*/
+      }
+    }
+  }
+};
+
+//ForceVehicleUsageArray.insert(player.ID, ForceVehicleUsage)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
@@ -398,20 +450,6 @@ function onVehicleHealthChanges(player) {
 }
 }
 
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-// END OF CODE, CHANGING OVER TO NEXT SECTION  //
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-
-GetInCar = false;
-GetInCarTime = 0;
-GetInCarReason = "Drive To";
-GetInCarFailed = false;
-
-function SetPlayersTime(Time) {
-  GetInCarTime = Time;
-  // Arcade gaming
-  FailTime += Time; 
-}
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
