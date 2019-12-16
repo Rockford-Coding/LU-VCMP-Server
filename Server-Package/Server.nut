@@ -66,7 +66,35 @@ FailedPlayer <- class(player) {
     constructor(Player) {
       Failed = false;
       FailTime = 0;
+      StartTime = 0;
+      FailTimer = ;
   };
+  Failed <- function(Player) {
+    if (Failed) {
+      if (FailTime == 0) {
+        //FreezePlayer(FrozenTime); // Pair with start time sequence. Most main functions arnt created yet
+        // reset
+	Failed = false;
+        FailTime = 0;
+		   
+	// prepare for the next mission
+	StartTime = 30; 
+      }
+      FailTime--;
+    }
+    // Mission Failed
+	
+    // Mission Restart
+    if (StartTime != 0) {
+      if (StartTime == 0) {
+        // Next mission
+        
+	// out of bounds, Add ::GTA_RESET()
+      }
+      StartTime--;
+      ::SmallMessage("Failed, Restarting... " + StartTime, 1000 , 1 );
+    }
+    // Mission Restart
 };
 
 //FailedPlayerArray.insert(player.ID, FailedPlayer)
@@ -468,30 +496,9 @@ function Timer_() {
 
 	   
        // Mission Failed
-       if (Failed) {
-         if (FailTime == 0) {
-           FreezePlayer(FrozenTime); // Pair with start time sequence. Most main functions arnt created yet
-		   // reset
-		   Failed = false;
-           FailTime = 0;
-		   
-		   // prepare for the next mission
-		   StartTime = 30; 
-         }
-         FailTime--;
-       }	
-       // Mission Failed
 
-       // Mission Restart
-       if (StartTime != 0) {
-         if (StartTime == 0) {
-            // Next mission
-            GTA_RESET()
-         }
-        StartTime--;
-        SmallMessage("Failed, Restarting... " + StartTime, 1000 , 1 );
-       }
-       // Mission Restart
+
+
 	
        // Get in car status
 	   if (GetInCar) {
