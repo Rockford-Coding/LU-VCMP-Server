@@ -144,9 +144,25 @@ MessageInfo <- class(player) {
     MessageStorage = [];
     MessageTime = 0;
     MessageID = 0;
+    Timer = ::NewTimer( "MessageUpdate", 1000, 0, player );
   }
-  
+  MessageUpdate <- function(Player) { 
+    local MyMessage = MessageInfoArray.find(Player.ID);
+
+     // Message Time
+     if (MessageTime != 0 ) { 
+       Random_Message(Player, MessageID);
+       MessageTime--;
+       if (MessageTime == 0 ) {
+         local number = ( GetTickCount() % 2 );
+         MessageID = number;
+         Random_Message(Player, number)
+         MessageTime = 5;
+       }
+     }
+  }
   AddMessage <- function(Text) { 
+
     MessageStorage.push(Text)
   };
   
@@ -249,53 +265,35 @@ ForceVehicleUsage <- class(player) {
     // Anything else return false and skip in code
     return false;
   }
+  // Three functions here. 
+  MissionInjection <- function(Type, x, y, z, Time, Model, Reason) { 
+
+    //Add to GTA_RESET()
+    ClearBlips(Player);
+    ClearVehicle();
+
+    // Get in car function
+    if (Type == "GetInCar") {
+      Mission.apply(function(Type) {
+        // The time set for getting in the car
+        if (Time != null) SetPlayersTime(Time);
+        else SetPlayersTime(60); 
+        GetInCar = true;	  
+      });
+    }
+		
+    // Temp Mission settings
+    if (Reason == "Theift") { 
+      Mission.apply(function(Type) {
+        // if x, y, z != null skip "EnableVehicle" process and create a vehicle
+        EnableVehicle(Player, Model);
+      });
+    }
+  }
+
 };
 
 //ForceVehicleUsageArray.insert(player.ID, ForceVehicleUsage)
-
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-// END OF CODE, CHANGING OVER TO NEXT SECTION  //
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-
-// Three functions here. 
-// Move over to "ForceVehicleUsage"
-MissionInjectionParamaters <- [];
- MissionInjection <- function() { 
-  foreach(IDX in MissionInjectionParamaters) {
-    local 
-	Type = MissionInjectionParamaters[0],
-	  
-	x = MissionInjectionParamaters[1],
-	y = MissionInjectionParamaters[2],
-        z = MissionInjectionParamaters[3],
-	
-	Time = MissionInjectionParamaters[4],
-	  
-	Model = MissionInjectionParamaters[5],
-	Reason = MissionInjectionParamaters[6];
-  }
-  //Mission settings
-  ClearBlips(Player);
-  ClearVehicle();
-
-  // Get in car function
-  if (Type == "GetInCar") {
-    Mission.apply(function(Type) {
-      // The time set for getting in the car
-      if (Time != null) SetPlayersTime(Time);
-      else SetPlayersTime(60); 
-      GetInCar = true;	  
-    });
-  }
-		
-  // Temp Mission settings
-  if (Reason == "Theift") { 
-    Mission.apply(function(Type) {
-	  // if x, y, z != null skip "EnableVehicle" process and create a vehicle
-      EnableVehicle(Player, Model);
-   });
-  }
-}
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
@@ -349,6 +347,8 @@ onPlayerSpawned <- function(PLAYER) {
   local iRandom = ( GetTickCount() % 4 );
   PLAYER.Pos = RandomSpawns[ iRandom ];
   PLAYER.SetWeapon(iRandom); // [Pistol, Shutgun, Bat, 0 fist] Blame player not server 
+  
+  // Fix Me
   GetOnlineRank();
   FindRankPos( PLAYER );
  }
@@ -363,6 +363,7 @@ LoadScript <- function() {
    LoadVehicles();
    LoadLiberty();
   }
+  // Add VCMP later 
 }
 
 // Message player method
@@ -376,6 +377,7 @@ function PlayerMessage(Player, Message) {
   }
 }
 
+// Bind this function
 function onPlayerKill( pKiller, pPlayer, iWeapon, iBodyPart )
 {
 	local szWeapon = GetWeaponName( iWeapon ), szBodyPart = GetBodyPartName( iBodyPart ) == "Unknown" ? "Body" : GetBodyPartName( iBodyPart );
@@ -400,6 +402,7 @@ function onPlayerKill( pKiller, pPlayer, iWeapon, iBodyPart )
 	return 1;
 }
 
+// Bind this function
 function onPlayerDeath( pPlayer, iReason )
 {
 	Message( "** " + pPlayer + " has died.", Colour( 255, 0, 0 ) );
@@ -415,44 +418,28 @@ function onPlayerDeath( pPlayer, iReason )
 	
 	return 1;
 }
-
-function onPlayerEnterSphere( pPlayer, pSphere )
-{
-	SendToAmmunation( pPlayer );
-	
-	return 1;
+// bind this function
+function onPlayerEnterSphere( pPlayer, pSphere ) {
 }
 
+// Attempt to add color 
 BLUE <- Color( 0, 0, 255 );
 ORANGE <- Color( 255, 153, 0 );
 LBLUE <- Color( 51, 51, 153 );
 GREEN <- Color( 0, 255, 0 );
 RED <- Color( 255, 0, 0 );
 SKYBLUE <- Color( 0, 102, 255 );
-PURPLE <- Colour( 204, 0, 204 );
+PURPLE <- Color( 204, 0, 204 );
 
+// Bind this function
 function onPlayerJoin( player ) {
-  // Create a mission object to store the mission statistics
-  MadPlayer[player.ID] = PlayerProgress();
-
-  players.rawset(player.Name,player);
-
-  //MadPlayer[player.ID].EnablePlayerTimer(player) // server trigered not player please!?
-
-  return 1;
+   PlayerMessage(player, "Welcome to the server")
 }
  
 //--------------------------------------------------
-// VCMP does not have pClass as LU does, no idea of gtac
-
-function onPlayerPart( player, partID )
-{
-  CallClientFunc( player, "Main/Client.nut", "RemovePickup" );
-
-  // Reset the stat array slot
-  MadPlayer[ player.ID ] = null;
+// bind this function
+function onPlayerPart( player, partID ) {
   players.rawdelete(player.Name);
-  return 1;
 }
 
 // Re code each section, Moving back from client over to server
@@ -473,20 +460,12 @@ function Timer_() {
          }
         FrozenTime--;
        }  	   
-	   // Check for vehicle health changes
-	   onVehicleHealthChanges(player);
+	   /* 
+	   import Vehicle script, Bind onVehicleHealth change in LU to our health change method
 	   
-	   // Message Time
- 	   if (MessageTime[player.ID] != 0 ) { 
-	     Random_Message(player, MessageID);
-	     MessageTime--;
-	     if (MessageTime[player.ID] == 0 ) {
-           local number = ( GetTickCount() % 2 );
-           MessageID = number;
-           Random_Message(player, number)
-           MessageTime = 5;
-	     }
-	   }
+	   onVehicleHealthChanges(player);
+	   */
+
 	   
        // Mission Failed
        if (Failed) {
