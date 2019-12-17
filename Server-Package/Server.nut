@@ -1,3 +1,10 @@
+/*
+	Find all the TODOS in the script. 
+	
+	Branch out the script and prepare to remove
+	************"if (MultiPlayer....)"************
+*/
+
 print("The script has initiated");
 
 /* Server statistics */
@@ -353,19 +360,15 @@ try {
 catch (e) {
  print("Everything is Fucked!!!!!!");
 }
-
+	
+/*
+	Our main functions
+*/
+	
 players <- {};
 
 /* Our functions */
-
-// Triggered when a player enters a vehicle
-onVehicleEntered <- function(PLAYER, VEHICLE, SEAT ) { 
-  //GTA GAME MODE 
-  GTA_GM(PLAYER, VEHICLE)
-}
-
-RandomSpawns <- [ Vector( 181.65, -470.1, 26.16 ), Vector( 414.4, -1389.5, 26.16 ), Vector( 68.09, -1547.3, 28.29 ), Vector( -16.11, -1018.3, 26.16 ) ];
-
+	
 // Called when the player spawns
 onPlayerSpawned <- function(PLAYER) { 
   GTA_RESET();
@@ -381,7 +384,15 @@ onPlayerSpawned <- function(PLAYER) {
   FindRankPos( PLAYER );
  }
 
-// onScriptLoad
+// Triggered when a player enters a vehicle
+onVehicleEntered <- function(PLAYER, VEHICLE, SEAT ) { 
+  //GTA GAME MODE 
+  GTA_GM(PLAYER, VEHICLE)
+}
+
+RandomSpawns <- [ Vector( 181.65, -470.1, 26.16 ), Vector( 414.4, -1389.5, 26.16 ), Vector( 68.09, -1547.3, 28.29 ), Vector( -16.11, -1018.3, 26.16 ) ];
+
+// Liberty Unleashed & VCMP event "onScriptLoad"
 LoadScript <- function() { 
   if ( MultiPlayer == "Liberty Unleashed" ) { 
    dofile("Scripts/Main/Multiplayer/Liberty-Unleashed.s");
@@ -391,21 +402,33 @@ LoadScript <- function() {
    LoadVehicles();
    LoadLiberty();
   }
-  // Add VCMP later 
+	
+  // Add VCMP later [TODO]
 }
 
 // Message player method
-function PlayerMessage(Player, Message) {
+	
+function PlayerMessage(Player, Text) {
   if (MultiPlayer == "Liberty Unleashed") {
-    MessagePlayer(Message, Player);
+    if (Player) MessagePlayer(Message, Player);
+    else Message(Text);
   }
+	
   if (MultiPlayer == "Vice City MultiPlayer") {
     // Look at the wiki and find a message that will except color
-    MessagePlayer( Message, Player );
+    if (Player) MessagePlayer(Message, Player);
+    else Message(Text);
   }
 }
 
 // Bind this function
+/* Yikes! [TODO]
+// LU function onPlayerMurder( Killer, Player, Weapon,  BodyPart)
+// VCMP onPlayerKill( killer, player, reason, bodypart ) 
+
+  So LU stores Weapon in the parameters of onPlayerKill. 
+  So we will make LU & VCMP pass over weapon names. 
+*/
 function onPlayerKill( pKiller, pPlayer, iWeapon, iBodyPart )
 {
 	local szWeapon = GetWeaponName( iWeapon ), szBodyPart = GetBodyPartName( iBodyPart ) == "Unknown" ? "Body" : GetBodyPartName( iBodyPart );
