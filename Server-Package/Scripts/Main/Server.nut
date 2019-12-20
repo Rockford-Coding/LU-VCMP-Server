@@ -33,6 +33,8 @@ else if (MultiPlayer == "Vice City MultiPlayer") {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+
+// $$$$
 local GameModePlayerArray = [];  
 GameModePlayer <- class(player) { 
     constructor(Player) {
@@ -83,7 +85,8 @@ FailedPlayer <- class(player) {
         // reset
 	Failed = false;
         FailTime = 0;
-		   
+	
+	// Do something with the player. Maybe force to spawn screen. Enable spawn premissions when the server is ready
 	// prepare for the next mission
 	StartTime = 30; 
       }
@@ -96,7 +99,8 @@ FailedPlayer <- class(player) {
       if (StartTime == 0) {
         // Next mission
         
-	// out of bounds, Add ::GTA_RESET()
+	// out of bounds, Add:
+	::GTA_RESET()
       }
       StartTime--;
       ::SmallMessage("Failed, Restarting... " + StartTime, 1000 , 1 );
@@ -238,6 +242,8 @@ ForceVehicleUsage <- class(player) {
     FailTime = Time; 
   }
   
+  // $$$$
+  /* Remove all of gta.. */
   GTA_RESET <- function(Player) {
     GetInCar = false;
     GetInCarTime = 0;
@@ -245,8 +251,11 @@ ForceVehicleUsage <- class(player) {
   
     MissionInjectionParamaters = ["GetInCar", null, null, null, 95, null, "Theift"];
     MissionInjection();
+	  
+    ClearBlips(Player);
+    ClearVehicle();
   }
-  
+  // $$$$
   GTA_GM <- function(VEHICLE, PLAYER) {
     if (GTA_ACTIVE) { 
       // Obtain the mission vehicle [ID]
@@ -264,6 +273,7 @@ ForceVehicleUsage <- class(player) {
       }
     }
   }
+  // $$$$
   EnableVehicle <- function(Player, Model) {
     if (!Model) {
       // Server wants a random car
@@ -283,15 +293,21 @@ ForceVehicleUsage <- class(player) {
       ::SmallMessage(Player, "Get in the car~r~!~p~... ", 40000 , 1 );
     }
   }
- 
+   // $$$$
   function ClearVehicle(vehicle) {
     foreach (key, value in VehicleInfo) {
       if (vehicle.ID == VehicleInfo[key]) {
         VehicleInfo.remove(key)
       }
     } 
-  }
-	
+   }
+   // $$$$
+ 
+  /* 
+  This can stay. 
+  Pretty universal finding random vehicleIDs in the array
+  */
+
   function SnagVehicleInfo(VEHICLE) {	  
     foreach (key, value in VehicleInfo) {
       // return the ID of the vehicle
@@ -300,12 +316,11 @@ ForceVehicleUsage <- class(player) {
     // Anything else return false and skip in code
     return false;
   }
+
   // Three functions here. 
   MissionInjection <- function(Type, x, y, z, Time, Model, Reason) { 
 
-    //Add to GTA_RESET()
-    ClearBlips(Player);
-    ClearVehicle();
+    GTA_RESET()
 
     // Get in car function
     if (Type == "GetInCar") {
