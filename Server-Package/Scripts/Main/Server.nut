@@ -293,6 +293,15 @@ EquipPlayerVehicle <- class(player) {
 
 //EquipPlayerVehicleArray.insert(player.ID, EquipPlayerVehicle)
 
+function SnagVehicleInfo(VEHICLE, Player) {	
+  local MyVehicles = EquipPlayerVehicleArray[Player.ID].VehicleInfo)
+  foreach (key, value in MyVehicles) {
+    // return the ID of the vehicle
+    if ( VehicleInfo[Player][key] == VEHICLE.ID) return true;
+  }
+  // Anything else return false and skip in code
+  return false;
+}
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
@@ -361,11 +370,47 @@ onPlayerSpawned <- function(PLAYER) {
   GetOnlineRank();
   FindRankPos( PLAYER );
  }
+	
+onJoinProcess <- function(PLAYER) { 
+   MessageOutput(PLAYER, "Welcome to the server")
+}
+	
+onPlayerLeave <- function(PLAYER) { 
+  players.rawdelete(PLAYER.Name);
+}
+// Bind this function
+onPlayerDied <- function(PLAYER) { 
+  MessageOutput("Server", "** " + PLAYER + " has died.")
+  /* Deal with the player stuff */
+  // Make universal cash function later
+  if ( PLAYER.Cash >= 100 ) PLAYER.Cash -= 100;
+  else PLAYER.Cash = 0;
 
+  // Find out if VCMP uses a score method. If so bind the two 
+  PLAYER.Score = PLAYER.Cash;
+	
+  // Part of a random rank system
+  GetOnlineRank();
+  FindRankPos( PLAYER );
+	
+  return 1;
+}
+	
 // Triggered when a player enters a vehicle
 onVehicleEntered <- function(PLAYER, VEHICLE, SEAT ) { 
-  //GTA GAME MODE 
-  GTA_GM(PLAYER, VEHICLE)
+  
+  /* Check to see what system is active */
+  local Current_Mode = GamemodePlayerArray.find(PLAYER.ID);
+
+  // Should be true or false right?
+  if (Current_Mode) { 
+    // Get the name of the mission type
+    Current_Mode = GamemodePlayerArray.[PLAYER.ID].Current;
+    
+    if (Current_Mode == "Grand Theft Auto" ) {
+      GTA_GM(PLAYER, VEHICLE)
+    }
+  }
 }
 
 RandomSpawns <- [ Vector( 181.65, -470.1, 26.16 ), Vector( 414.4, -1389.5, 26.16 ), Vector( 68.09, -1547.3, 28.29 ), Vector( -16.11, -1018.3, 26.16 ) ];
@@ -386,10 +431,10 @@ LoadScript <- function() {
 
 // Message player method
 	
-function PlayerMessage(Player, Text) {
+function MessageOutput(Player, Text) {
   if (MultiPlayer == "Liberty Unleashed") {
     if (Player) MessagePlayer(Message, Player);
-    else Message(Text);
+    else if ("Server") Message(Text);
   }
 	
   if (MultiPlayer == "Vice City MultiPlayer") {
@@ -430,22 +475,7 @@ function onPlayerKill( pKiller, pPlayer, iWeapon, iBodyPart )
 	return 1;
 }
 
-// Bind this function
-function onPlayerDeath( pPlayer, iReason )
-{
-	Message( "** " + pPlayer + " has died.", Colour( 255, 0, 0 ) );
-	
-	/* Deal with the player stuff */
-	if ( pPlayer.Cash >= 100 ) pPlayer.Cash -= 100;
-	else pPlayer.Cash = 0;
 
-	pPlayer.Score = pPlayer.Cash;
-	
-	GetOnlineRank();
-	FindRankPos( pPlayer );
-	
-	return 1;
-}
 // bind this function
 function onPlayerEnterSphere( pPlayer, pSphere ) {
 }
@@ -458,17 +488,9 @@ GREEN <- Color( 0, 255, 0 );
 RED <- Color( 255, 0, 0 );
 SKYBLUE <- Color( 0, 102, 255 );
 PURPLE <- Color( 204, 0, 204 );
-
-// Bind this function
-function onPlayerJoin( player ) {
-   PlayerMessage(player, "Welcome to the server")
-}
  
 //--------------------------------------------------
-// bind this function
-function onPlayerPart( player, partID ) {
-  players.rawdelete(player.Name);
-}
+
 
 // Re code each section, Moving back from client over to server
 
@@ -606,16 +628,6 @@ function InitializeArray()
 		}
 		else OnlineRank[ i ] = PlrScore();
 	}
-}
-
-function PlayerMessage(PMessage) {
-  if (MultiPlayer == "Liberty Unleashed") {
-      Message(PMessage);
-  }
-  if (MultiPlayer == "Vice City MultiPlayer") {
-    // Look at the wiki and find a message that will except color
-      Message(PMessage);
-  }
 }
 
  /* foreach(idx, Function in getroottable()) {
