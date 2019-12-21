@@ -275,19 +275,44 @@ SetPlayersTime <- class(Player, Time) {
 
 };
 
-//ForceVehicleUsageArray.insert(player.ID, ForceVehicleUsage)
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+// END OF CODE, CHANGING OVER TO NEXT SECTION  //
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+	
+local EquipPlayerVehicleArray = [];
+EquipPlayerVehicle <- class(player) {
+  constructor(player) {
+    Reason = "";
+    VehicleInfo = [];
+    Passed = false;
+	  
+    Time = 0;
+    Active = false;
+  }
+}
+
+//EquipPlayerVehicleArray.insert(player.ID, EquipPlayerVehicle)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+/*  
+  Most of the code desired to store in the memory first has already been loaded. 
+  The server hasn't even started to actually load yet. We need to find some statistics as 
+  to what Multiplayer is being launched!
+*/
 
+/*
+	Our main functions
+*/
+	
 try {
   if ("HashTable" in getroottable()) {
     print("Liberty Unleashed"); 
     MultiPlayer = "Liberty Unleashed";
     
     // Trigger the inbuilt onScriptLoad event
-	  RenameFunction("LoadScript", "onScriptLoad");
+    RenameFunction("LoadScript", "onScriptLoad");
 
   }
   /* 
@@ -297,20 +322,26 @@ try {
   else {
     // add a unique roottable function
     MultiPlayer = "Vice City MultiPlayer";
-	onPlayerSpawned = onPlayerSpawn(null)
-	LoadVCMP();
+    RenameFunction("LoadScript", "onScriptLoad");
   }*/
   // Everything else is configed, resume
 
 }
  
 catch (e) {
+ 
  print("Everything is Fucked!!!!!!");
+ // Nothing else will continue 
 }
-	
-/*
-	Our main functions
-*/
+
+/*  
+  Everything else has been binded in the Multiplayer scripts
+  ["Liberty-Unleashed.nut", "Vice-City-Multiplayer.nut"]
+  Resume!
+*/ 
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+// END OF CODE, CHANGING OVER TO NEXT SECTION  //
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 	
 players <- {};
 
