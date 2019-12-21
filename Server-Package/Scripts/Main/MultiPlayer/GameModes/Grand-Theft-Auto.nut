@@ -11,7 +11,14 @@ local EquipPlayerVehicleArray = [];
 EquipPlayerVehicle <- class(player) {
   constructor(player) {
     Reason = "";
-    // Link VehicleInfo array to here. We could use that vehicle storage	
+    VehicleInfo = [];
+    Passed = false;
+	  
+    Time = 0;
+    Active = false;
+  }
+}
+
 
 // Force Vehicle usage
 local ForceVehicleUsageArray = [];  
@@ -21,7 +28,7 @@ ForceVehicleUsage <- class(player) {
     GetInCarTime = 0;
     GetInCarReason = "Drive To";
     GetInCarFailed = false;
-    VehicleInfo = [];
+    
   }
 
   
@@ -91,12 +98,5 @@ ForceVehicleUsage <- class(player) {
   Pretty universal finding random vehicleIDs in the array
   */
 
-  function SnagVehicleInfo(VEHICLE) {	  
-    foreach (key, value in VehicleInfo) {
-      // return the ID of the vehicle
-      if ( VehicleInfo[key] == VEHICLE.ID) return true;
-    }
-    // Anything else return false and skip in code
-    return false;
-  }
+ 
 }
