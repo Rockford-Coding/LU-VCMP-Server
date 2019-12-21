@@ -261,3 +261,6 @@ function onPlayerEnteredVehicle( player, vehicle, seat ) {
   onVehicleEntered(player, vehicle, seat );
 }
 
+function onPlayerJoin( player ) {
+   onJoinProcess( player ); 
+}
