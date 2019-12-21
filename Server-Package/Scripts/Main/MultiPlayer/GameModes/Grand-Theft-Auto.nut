@@ -11,7 +11,7 @@ local EquipPlayerVehicleArray = [];
 EquipPlayerVehicle <- class(player) {
   constructor(player) {
     Reason = "";
-    // Link VehicleInfo array to here. We could use that vehicle storage	
+    // Bind VehicleInfo array to here. We could use that vehicle storage	
 
 // Force Vehicle usage
 local ForceVehicleUsageArray = [];  
