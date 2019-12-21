@@ -264,3 +264,12 @@ function onPlayerEnteredVehicle( player, vehicle, seat ) {
 function onPlayerJoin( player ) {
    onJoinProcess( player ); 
 }
+
+function onPlayerPart( player, partID ) {
+  onPlayerLeave( player ) 
+}
+
+// Bind this function
+function onPlayerDeath( pPlayer, iReason ) {
+  onPlayerDied(pPlayer);
+};
