@@ -81,18 +81,6 @@ Gamemode <- class(player, Mode) {
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//  
-local FailedPlayerArray = [];  
-FailedPlayer <- class(player) { 
-    constructor(Player) {
-
-  };
-  
-
-//FailedPlayerArray.insert(player.ID, FailedPlayer)
-	
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-// END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 local CheckpointPlayerArray = [];  
 CheckpointPlayer <- class(player) { 
