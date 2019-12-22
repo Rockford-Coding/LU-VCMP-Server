@@ -82,19 +82,19 @@ Gamemode <- class(player, Mode) {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+/*Helps document the mission class. We can use this to detect what was the last or current checkpoint 
+Also mixes a Chapter, Chapter represents how many times a play must do something to pass. It could be racing
+vectors to whatever, Failed is not implimented here there are other functiong the game mode maker will do based upon what you select*/
+
 local CheckpointPlayerArray = [];  
 CheckpointPlayer <- class(player) { 
     constructor(Player) {
       Checkpoint = -1; // inc 
-      MaxCheckpoint = 0;
-  
-      CheckpointTime = 0;
-      CheckpointCash = 0;
-      SphereID = null;
+      Chapter = 0;
   };
 };
 
-//CheckpointPlayerArray.insert(player.ID, CheckpointPlayer)
+CheckpointPlayerArray.append(player.ID, CheckpointPlayer)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
@@ -173,7 +173,7 @@ SystemTimer <- class(Player) {
   function Timer(INTERVAL, PLAYER, func) {
     //Sync each mp to a timer function and remove NewTimer here.
     //Each mod will load it's own script. So use the same name on each each timer. 
-    Timer.insert(func, ::NewTimer( func, INTERVAL, 0, PLAYER ));
+    Timer.append(func, ::NewTimer( func, INTERVAL, 0, PLAYER ));
   }
   function StopTimer(PLAYER, func) { 
      Timer[func].Stop();	    
@@ -183,16 +183,31 @@ SystemTimer <- class(Player) {
       Timer[func].Start();	    
   }
   function DeleteTimer(PLAYER, func) { 
-	if ( Timer.find(func) ) {
-	  Timer[func].Delete();	    
-	  Timer.remove(func)
-		
-	  // filter method to resize. check the array .len. Might be able to clear this from the memory
-          Timer.sort(compare);
-          local idx = Timer.len();
-          Timer.resize(idx);
-	}
-  }
+   if ( Timer.find(func) ) {
+     // Timer is now gone from player
+     Timer[func].Delete();	 
+     Timer.remove(func)
+
+     // Recalculate the players array to prevent it from growing in size
+     Timer.sort();
+     local idx = -1;
+     foreach (index, name in Timer)  {
+       if (name)  {
+          idx++;
+	  // print(name)
+       }
+     }
+     if (idx != -1) {
+       Timer[name].resize(idx);
+       print("System Timers " + Timers.len()) 
+     }
+     else { 
+       // There is nothing there clear the memory
+       Timer[name].clear();
+       print("System Timers " + Timers.len()) // make sure that shit is empty
+       SystemTimerArrayPlayer[PLAYER].clear(); // This library is now dead for the player
+     }
+   }
 };
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
