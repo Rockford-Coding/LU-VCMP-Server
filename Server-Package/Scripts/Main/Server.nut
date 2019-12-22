@@ -185,8 +185,8 @@ SystemTimer <- class(Player) {
   function DeleteTimer(PLAYER, func) { 
    if ( Timer.find(func) ) {
      // Timer is now gone from player
-     Timer[func].Delete();	 
-     Timer.remove(func)
+     Timer[func].Delete(); // Timer instance	 
+     Timer.remove(func) // Removal from array
 
      // Recalculate the players array to prevent it from growing in size
      Timer.sort();
@@ -203,9 +203,9 @@ SystemTimer <- class(Player) {
      }
      else { 
        // There is nothing there clear the memory
-       Timer[name].clear();
+       Timer.clear();
        print("System Timers " + Timers.len()) // make sure that shit is empty
-       SystemTimerArrayPlayer[PLAYER].clear(); // This library is now dead for the player
+       ::SystemTimerArrayPlayer[PLAYER].clear(); // This library is now dead for the player
      }
    }
 };
