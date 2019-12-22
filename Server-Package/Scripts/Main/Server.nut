@@ -186,18 +186,17 @@ SystemTimer <- class(Player) {
     Timer = [];
   }
   function Timer(INTERVAL, PLAYER, func) {
-    Timer.insert(func, ::NewTimer( func, INTERVAL, 0, player ));
+    //Sync each mp to a timer function and remove NewTimer here
+    Timer.insert(func, ::NewTimer( func, INTERVAL, 0, PLAYER ));
   }
   function StopTimer(PLAYER, func) { 
-    Timer.rawget(func)
-      // return the ID of the vehicle
-      if ( func == Timer[key]) Timer[key].Stop();	    
+     Timer[func].Stop();	    
     }
   }
   function StartTimer(PLAYER, func) { 
     foreach (key, value in Timer) {
       // return the ID of the vehicle
-      if ( func == Timer[key]) Timer[key].Start();	    
+      if ( func == Timer[key]) Timer[func].Start();	    
     }
   }
   function DeleteTimer(PLAYER, func) { 
@@ -205,7 +204,9 @@ SystemTimer <- class(Player) {
 	Timer.remove(func)
 		
 	// filter method to resize. check the array .len. Might be able to clear this from the memory
-	
+        Timer.sort(compare);
+        local idx = Timer.len();
+        Timer.resize(idx);
   }
 };
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
