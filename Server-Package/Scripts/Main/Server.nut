@@ -35,7 +35,7 @@ else if (MultiPlayer == "Vice City MultiPlayer") {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 
 // $$$$
-local GameModePlayerArray = [];  
+/*local GameModePlayerArray = [];  
 GameModePlayer <- class(player) { 
     constructor(Player) {
       MissionID = -1;
@@ -47,7 +47,7 @@ GameModePlayer <- class(player) {
     MissionID = iD;
     BonusTimeRate += TimeRate;
 };
-
+*/
 //GameModePlayerArray.insert(player.ID, GameModePlayer)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
