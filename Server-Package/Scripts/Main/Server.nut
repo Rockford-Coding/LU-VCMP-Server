@@ -168,12 +168,46 @@ FreezePlayer <- class(player) {
   constructor(Player) {
     Froze = false;
     FrozenTime = 0;
+    Timer = null//::NewTimer( "MessageUpdate", 1000, 0, player );
     Date = "6/6/6";
   }
 };
 
 //FreezePlayerArray.insert(player.ID, FreezePlayer)
+	
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+// END OF CODE, CHANGING OVER TO NEXT SECTION  //
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 
+local SystemTimerArray = [];
+SystemTimer <- class(Player) { 
+  constructor(Player) {
+    Function = "Foo";
+    Timer = [];
+  }
+  function Timer(INTERVAL, PLAYER, func) {
+    Timer.insert(func, ::NewTimer( func, INTERVAL, 0, player ));
+  }
+  function StopTimer(PLAYER, func) { 
+    Timer.rawget(func)
+      // return the ID of the vehicle
+      if ( func == Timer[key]) Timer[key].Stop();	    
+    }
+  }
+  function StartTimer(PLAYER, func) { 
+    foreach (key, value in Timer) {
+      // return the ID of the vehicle
+      if ( func == Timer[key]) Timer[key].Start();	    
+    }
+  }
+  function DeleteTimer(PLAYER, func) { 
+	Timer[func].Delete();	    
+	Timer.remove(func)
+		
+	// filter method to resize. check the array .len. Might be able to clear this from the memory
+	
+  }
+};
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
