@@ -3,6 +3,9 @@
 	
 	Branch out the script and prepare to remove
 	************"if (MultiPlayer....)"************
+	
+    Eliminate the two timed methods and call "SystemTimers".
+    We will be soon creating timed events. Then adding the rest of the files to the server
 */
 
 print("The script has initiated");
@@ -30,55 +33,23 @@ else if (MultiPlayer == "Vice City MultiPlayer") {
   ::Color <- function(R, G, B) { return RGB( R, G, B ); }
 };
 
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-// END OF CODE, CHANGING OVER TO NEXT SECTION  //
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-
-// $$$$
-/*local GameModePlayerArray = [];  
-GameModePlayer <- class(player) { 
-    constructor(Player) {
-      MissionID = -1;
-      Mission = [];
-      BonusTimeRate = 0; // Time added to inc the time on each checkpoint
-      GTA_ACTIVE = false;
-  };
-  EnableMission <- function(iD, TimeRate) {
-    MissionID = iD;
-    BonusTimeRate += TimeRate;
-};
-*/
-//GameModePlayerArray.insert(player.ID, GameModePlayer)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-local CheckpointPlayerArray = [];  
-CheckpointPlayer <- class(player) { 
-    constructor(Player) {
-      Checkpoint = -1; // inc 
-      MaxCheckpoint = 0;
-  
-      CheckpointTime = 0;
-      CheckpointCash = 0;
-      SphereID = null;
-  };
-};
 
-//CheckpointPlayerArray.insert(player.ID, CheckpointPlayer)
+local GamemodePlayerArray = [];  
+Gamemode <- class(player, Mode) { 
+  constructor(Player, Mode) {
+    Current = Mode;
+    
+    Failed = false;
+    FailTime = 0; // Old fail method
+    StartTime = 0; // Old launch sequence
 
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-// END OF CODE, CHANGING OVER TO NEXT SECTION  //
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//  
-local FailedPlayerArray = [];  
-FailedPlayer <- class(player) { 
-    constructor(Player) {
-      Failed = false;
-      FailTime = 0;
-      StartTime = 0;
-      FailTimer = ;
-  };
-  Failed <- function(Player) {
+  }
+  // Called from library "SystemTimer" 
+  PlayerElimination <- function(Player) {
     if (Failed) {
       if (FailTime == 0) {
         //FreezePlayer(FrozenTime); // Pair with start time sequence. Most main functions arnt created yet
@@ -106,9 +77,36 @@ FailedPlayer <- class(player) {
       ::SmallMessage("Failed, Restarting... " + StartTime, 1000 , 1 );
     }
     // Mission Restart
-};
+};//GamemodePlayerArray.insert(player.ID, Mode);
+
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+// END OF CODE, CHANGING OVER TO NEXT SECTION  //
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//  
+local FailedPlayerArray = [];  
+FailedPlayer <- class(player) { 
+    constructor(Player) {
+
+  };
+  
 
 //FailedPlayerArray.insert(player.ID, FailedPlayer)
+	
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+// END OF CODE, CHANGING OVER TO NEXT SECTION  //
+//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
+local CheckpointPlayerArray = [];  
+CheckpointPlayer <- class(player) { 
+    constructor(Player) {
+      Checkpoint = -1; // inc 
+      MaxCheckpoint = 0;
+  
+      CheckpointTime = 0;
+      CheckpointCash = 0;
+      SphereID = null;
+  };
+};
+
+//CheckpointPlayerArray.insert(player.ID, CheckpointPlayer)
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
@@ -182,11 +180,11 @@ FreezePlayer <- class(player) {
 local SystemTimerArray = [];
 SystemTimer <- class(Player) { 
   constructor(Player) {
-    Function = "Foo";
     Timer = [];
   }
   function Timer(INTERVAL, PLAYER, func) {
-    //Sync each mp to a timer function and remove NewTimer here
+    //Sync each mp to a timer function and remove NewTimer here.
+    //Each mod will load it's own script. So use the same name on each each timer. 
     Timer.insert(func, ::NewTimer( func, INTERVAL, 0, PLAYER ));
   }
   function StopTimer(PLAYER, func) { 
@@ -194,19 +192,18 @@ SystemTimer <- class(Player) {
     }
   }
   function StartTimer(PLAYER, func) { 
-    foreach (key, value in Timer) {
-      // return the ID of the vehicle
-      if ( func == Timer[key]) Timer[func].Start();	    
-    }
+      Timer[func].Start();	    
   }
   function DeleteTimer(PLAYER, func) { 
-	Timer[func].Delete();	    
-	Timer.remove(func)
+	if ( Timer.find(func) ) {
+	  Timer[func].Delete();	    
+	  Timer.remove(func)
 		
-	// filter method to resize. check the array .len. Might be able to clear this from the memory
-        Timer.sort(compare);
-        local idx = Timer.len();
-        Timer.resize(idx);
+	  // filter method to resize. check the array .len. Might be able to clear this from the memory
+          Timer.sort(compare);
+          local idx = Timer.len();
+          Timer.resize(idx);
+	}
   }
 };
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
@@ -256,17 +253,6 @@ MessageInfo <- class(player) {
 
 //MessageInfoArray.insert(player.ID, MessageInfo)
 
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-// END OF CODE, CHANGING OVER TO NEXT SECTION  //
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-
-local GamemodePlayerArray = [];  
-Gamemode <- class(player, Mode) { 
-  constructor(Player, Mode) {
-    Current = Mode;
-  }
-};
-//GamemodePlayerArray.insert(player.ID, Mode);
 	
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
