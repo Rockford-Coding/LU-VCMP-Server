@@ -4,7 +4,7 @@
 	Branch out the script and prepare to remove
 	************"if (MultiPlayer....)"************
 	
-    Eliminate the two timed methods and call "SystemTimers".
+    Eliminate the timed methods and call "SystemTimers".
     We will be soon creating timed events. Then adding the rest of the files to the server
 */
 
