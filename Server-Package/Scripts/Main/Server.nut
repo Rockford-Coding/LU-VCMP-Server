@@ -52,14 +52,14 @@ Gamemode <- class(player, Mode) {
   PlayerElimination <- function(Player) {
     if (Failed) {
       if (FailTime == 0) {
-        //FreezePlayer(FrozenTime); // Pair with start time sequence. Most main functions arnt created yet
+	StartTime = 30; 
+        FreezePlayer(StartTime); // Pair with start time sequence. Most main functions arnt created yet
         // reset
 	Failed = false;
         FailTime = 0;
 	
 	// Do something with the player. Maybe force to spawn screen. Enable spawn premissions when the server is ready
 	// prepare for the next mission
-	StartTime = 30; 
       }
       FailTime--;
     }
@@ -69,9 +69,7 @@ Gamemode <- class(player, Mode) {
     if (StartTime != 0) {
       if (StartTime == 0) {
         // Next mission
-        
-	// out of bounds, Add:
-	::GTA_RESET()
+	::GTA_RESET() // It's time
       }
       StartTime--;
       ::SmallMessage("Failed, Restarting... " + StartTime, 1000 , 1 );
@@ -99,12 +97,24 @@ CheckpointPlayerArray.append(player.ID, CheckpointPlayer)
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-local GoToSpherePlayerArray = [];  
-GoToSpherePlayer <- class(player) { 
+local GoToAreaPlayerArray = [];  
+GoToAreaPlayer <- class(player) { 
     constructor(Player) {
-      GoToSphere = false;
-      GoToSphereTime = 0;
-  };
+      Active = false;
+      Area = [];
+	    
+      Distance-+
+  }
+  function AddArea(X, Y, Z, Type, ) {
+    if (Type == "Distamce"
+      Area.apply(function(Type) {
+        // The time set for getting in the car
+        if (Time != null) SetPlayersTime(Time);
+        else SetPlayersTime(60); 
+        GetInCar = true;	  
+      });
+    }
+
 };
 
 //GoToSpherePlayerArray.insert(player.ID, GoToSpherePlayer)
