@@ -183,7 +183,7 @@ SystemTimer <- class(Player) {
   function Timer(INTERVAL, PLAYER, func) {
     //Sync each mp to a timer function and remove "NewTimer" here.
     //Each mod will load it's own script. So use the same name on each each timer. 
-    Timer.append(func, ::NewTimer( func, INTERVAL, 0, PLAYER ));
+    Timer.append(func, ::SetTimer(INTERVAL, func, PLAYER))
   }
   function StopTimer(PLAYER, func) { 
      Timer[func].Stop();	    
@@ -216,7 +216,7 @@ SystemTimer <- class(Player) {
        // There is nothing in this shit clear the memory
        Timer.clear();
        print("System Timers " + Timers.len()) // make sure that shit is empty
-       ::SystemTimerArrayPlayer[PLAYER].clear(); // This library is now dead for the player
+       ::SystemTimerArrayPlayer[PLAYER] = null // This library is now dead for the player
      }
    }
 };
