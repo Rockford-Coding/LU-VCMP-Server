@@ -180,7 +180,7 @@ SystemTimer <- class(Player) {
   constructor(Player) {
     Timer = [];
   }
-  function Timer(INTERVAL, PLAYER, func) {
+  function CreateTimer(INTERVAL, PLAYER, func) {
     //Sync each mp to a timer function and remove "NewTimer" here.
     //Each mod will load it's own script. So use the same name on each each timer. 
     Timer.append(func, ::SetTimer(INTERVAL, func, PLAYER))
