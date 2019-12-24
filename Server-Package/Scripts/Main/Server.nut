@@ -181,7 +181,7 @@ SystemTimer <- class(Player) {
     Timer = [];
   }
   function Timer(INTERVAL, PLAYER, func) {
-    //Sync each mp to a timer function and remove NewTimer here.
+    //Sync each mp to a timer function and remove "NewTimer" here.
     //Each mod will load it's own script. So use the same name on each each timer. 
     Timer.append(func, ::NewTimer( func, INTERVAL, 0, PLAYER ));
   }
@@ -192,19 +192,20 @@ SystemTimer <- class(Player) {
   function StartTimer(PLAYER, func) { 
       Timer[func].Start();	    
   }
-  function DeleteTimer(PLAYER, func) { 
+  function DeleteTimer(PLAYER, func) { // PLAYER ever needed?
    if ( Timer.find(func) ) {
      // Timer is now gone from player
      Timer[func].Delete(); // Timer instance	 
      Timer.remove(func) // Removal from array
 
-     // Recalculate the players array to prevent it from growing in size
+     // Recalculate the players timer array to prevent it from growing in size
      Timer.sort();
+     // Squirrel starts at zero
      local idx = -1;
      foreach (index, name in Timer)  {
        if (name)  {
           idx++;
-	  // print(name)
+	  // print(name) // wtf is it?
        }
      }
      if (idx != -1) {
@@ -212,7 +213,7 @@ SystemTimer <- class(Player) {
        print("System Timers " + Timers.len()) 
      }
      else { 
-       // There is nothing there clear the memory
+       // There is nothing in this shit clear the memory
        Timer.clear();
        print("System Timers " + Timers.len()) // make sure that shit is empty
        ::SystemTimerArrayPlayer[PLAYER].clear(); // This library is now dead for the player
