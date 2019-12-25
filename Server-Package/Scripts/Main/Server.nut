@@ -531,67 +531,49 @@ PURPLE <- Color( 204, 0, 204 );
 // Re code each section, Moving back from client over to server
 
 
-// This method has to get updated
-function Timer_() {
+// This method has to get updated way outdated
+function TempTimer() {
   // Player 
   foreach(player in players) {
    if (player) {
      if (player.Spawned) { 
 	 
        if (FrozenTime != 0) {
-	     SmallMessage("Frozen for " + FrozenTime, 1000 , 1 );
-         if (FrozenTime == 0) {
-           Froze = false;
-		   Player.Frozen = true;
-         }
+       SmallMessage("Frozen for " + FrozenTime, 1000 , 1 );
+       if (FrozenTime == 0) {
+         Froze = false;
+	 Player.Frozen = true; // call back to mp for proper freeze
+       }
         FrozenTime--;
        }  	   
-	   /* 
-	   import Vehicle script, Bind onVehicleHealth change in LU to our health change method
-	   
-	   onVehicleHealthChanges(player);
-	   */
-
-	   
        // Mission Failed
-
-
-
 	
        // Get in car status
-	   if (GetInCar) {
+       if (GetInCar) {
          if (FailTime == 0) {
-		   Failed = true;
-		   FailTime = 30;
+           Failed = true;
+	   FailTime = 30;
 		   
-		   if (player.Vehicle) {
-		     local vehicle = player.Vehicle, getcar = FindVehicle(vehicle.ID);
-		     // Add more statistics to VehicleInfo and MadPlayer :)
-		  
-		     // Oh shit xD
-		     vehicle.Locked = true;
-		     vehicle.Health = 250;
-		    }
-		    else player.Health = 0;
-						
-        	// Ping this to restart the mission ID 
-		    /* We need to send the player to the last vehicle he got in. We also need to check on vehicle ability.
-            A player might be using that car. Maybe a vehicle class that checks usage + player, skip to another vehicle.
-		    Add all the vehicles to a Temp vehicle array and void out all the used vehicles during rand() car ID
-		    */
-		    Failed = true;
-			FailTime = 30;
-         }
+	   if (player.Vehicle) {
+	     local vehicle = player.Vehicle, getcar = FindVehicle(vehicle.ID);
+	     vehicle.Locked = true;
+	     vehicle.Health = 250;
+           }
+	   else player.Health = 0;
+
+	   Failed = true;
+	   FailTime = 30;
+          }
+        }
+      }
+      else {
+        ClearMessages(player)
+      }
     }
-	}
-	else {
-	ClearMessages(player)
-	}
-  }
   }
 }
 	
-function Random_Message(player, iD) {
+/*function Random_Message(player, iD) {
   switch( iD ) {
     // Car Time
     case 1:
@@ -607,7 +589,7 @@ function Random_Message(player, iD) {
     MessageID = 2;
     break;
   }
-}
+}*/
 
 
 class PlrScore
@@ -656,7 +638,8 @@ function InitializeArray()
 
 	for ( local i = 0; i < iMaxPlrs; i++ )
 	{
-		p = FindPlayer( i );
+		local Player = FindPlayer( i );  // Need to store the players name on join so we can handle them better 
+		p = LocatePlayer(Player.Name);
 
 		if ( p ) 
 		{
@@ -666,38 +649,22 @@ function InitializeArray()
 	}
 }
 
- /* foreach(idx, Function in getroottable()) {
-    print(Function)
-  }*/
-  
-
-
-// Called from a timed loop. ignore one second delay [update: Call from client version "onVehicleHealthChanges"]
-function onVehicleHealthChanges(player) {
+// Back up this version in case a mod does not have this option
+function onVehicleHealthMonitor() {
   local i = 0;
-  while(FindVehicle( i ) != null) {
- 
-    local vehicle = FindVehicle(i);
-	  
-   if (MUNICIPAL_VEHICLE[i].CURRENT_HEALTH != vehicle.Health) {
-	 if (MUNICIPAL_VEHICLE[i].USED == false) {
-		 vehicle.Health = 300;
-	 }
-	 // Update the old health
-	 MUNICIPAL_VEHICLE[i].OLD_HEALTH = MUNICIPAL_VEHICLE[i].CURRENT_HEALTH;
+  while(LocateVehicle(i)) {
+    local vehicle = LocateVehicle(i);
+    if (MUNICIPAL_VEHICLE[i].CURRENT_HEALTH != vehicle.Health) {
+        vehicle.Health = 300; // Set for reset
+        MUNICIPAL_VEHICLE[i].OLD_HEALTH = MUNICIPAL_VEHICLE[i].CURRENT_HEALTH;
 	 
-	 // Update the new health
-	 MUNICIPAL_VEHICLE[i].CURRENT_HEALTH = vehicle.Health;
-	 
-	 MUNICIPAL_VEHICLE[i].USED = true;
-	 print(vehicle + " health changed")
-
-	 // Mission check
-
-	}
-   i++;
+        // Update the new health
+        MUNICIPAL_VEHICLE[i].CURRENT_HEALTH = vehicle.Health;
+        MUNICIPAL_VEHICLE[i].USED = true;
+        print(vehicle + " health changed")
+    }
+    i++;
   }
-}
 }
 
 
@@ -711,7 +678,7 @@ function ClearBlips(Player) {
 	 local blimp = ::FindBlip(value)
 	 if (blimp) {
 	   blimp.Remove();
-       BlimpInfo.clear();
+       BlimpInfo.clear(); // Call back a func to mp script 
     }
   }
 }
