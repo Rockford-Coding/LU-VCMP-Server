@@ -273,3 +273,16 @@ function onPlayerPart( player, partID ) {
 function onPlayerDeath( pPlayer, iReason ) {
   onPlayerDied(pPlayer);
 };
+
+function SetTimer(Time, Function, Link) {
+ // Pass the entire timer over
+ if (!Link) return NewTimer( Function, Time, 0);
+ else return NewTimer( Function, Time, 0, Link );
+}
+
+
+function LocatePlayer(String) { 
+ if (FindPlayer(String)) { 
+  return FindPlayer(String);
+ }
+}
