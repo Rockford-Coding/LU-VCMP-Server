@@ -20,15 +20,13 @@ function RenameFunction(oldName, newName) {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 
 local GamemodePlayerArray = [];  
-Gamemode <- class(player, Mode) { 
-  constructor(Player, Mode) {
-    Current = Mode;
+Gamemode <- class() { 
+  Current = Mode;
     
-    Failed = false;
-    FailTime = 0; // Old fail method
-    StartTime = 0; // Old launch sequence
+  Failed = false;
+  FailTime = 0; // Old fail method
+  StartTime = 0; // Old launch sequence
 
-  }
   // Called from library "SystemTimer" 
   PlayerElimination <- function(Player) {
     if (Failed) {
@@ -57,35 +55,28 @@ Gamemode <- class(player, Mode) {
     }
     // Mission Restart
 };//GamemodePlayerArray.insert(player.ID, Mode);
-
+	
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-/*Helps document the mission class. We can use this to detect what was the last or current checkpoint 
-Also mixes a Chapter, Chapter represents how many times a play must do something to pass. It could be racing
-vectors to whatever, Failed is not implimented here there are other functiong the game mode maker will do based upon what you select*/
-
+	
 local CheckpointPlayerArray = [];  
-CheckpointPlayer <- class(player) { 
-    constructor(Player) {
-      Checkpoint = -1; // inc 
-      Chapter = 0;
-  };
+CheckpointPlayer <- class() { 
+  Checkpoint = -1; // inc 
+  Chapter = 0;
 };
 
-CheckpointPlayerArray.append(player.ID, CheckpointPlayer)
-
+//CheckpointPlayerArray.append(player.ID, CheckpointPlayer)
+	
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 local GoToAreaPlayerArray = [];  
-GoToAreaPlayer <- class(player) { 
-    constructor(Player) {
-      Active = false;
-      Area = [];
+GoToAreaPlayer <- class() { 
+  Active = false;
+  Area = [];
 	    
-      Distance-+
-  }
+  Distance-+
   function AddArea(X, Y, Z, Type, ) {
     if (Type == "Distamce"
       Area.apply(function(Type) {
@@ -225,10 +216,12 @@ MessageInfo <- class() {
   }
   AddMessage <- function(Text) { 
     MessageStorage.append(Text)
+     MessageID++;
+     GetMessage()
   };
   
-  GetMessage <- function(TYPE) {  
-    onScreenSmall3DText(MessageStorage[MessageID])
+  GetMessage <- function() {  
+    ::onScreenSmall3DText(MessageStorage[MessageID])
   };
   
   ClearMessages <- function() {
@@ -242,19 +235,6 @@ MessageInfo <- class() {
 };
 
 //MessageInfoArray.insert(player.ID, MessageInfo)
-
-	
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-// END OF CODE, CHANGING OVER TO NEXT SECTION  //
-//=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//	
-
-
-SetPlayersTime <- class(Player, Time) {
-  constructor(Player, Time) {
-    FailTime = Time; 
-  }
-}
-//GamemodePlayerArray.insert(player.ID, Time);
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
@@ -316,16 +296,7 @@ function SnagVehicleInfo(VEHICLE, Player) {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-/*  
-  Most of the code desired to store in the memory first has already been loaded. 
-  The server hasn't even started to actually load yet. We need to find some statistics as 
-  to what Multiplayer is being launched!
-*/
 
-/*
-	Our main functions
-*/
-	
 try {
   if ("HashTable" in getroottable()) {
     print("Liberty Unleashed"); 
@@ -375,22 +346,21 @@ players <- {};
 /* Our functions */
 	
 // Called when the player spawns
-onPlayerSpawned <- function(PLAYER) { 
-  GTA_RESET();
-  MessageTime[PLAYER.ID] = 5;
-  MessageID[PLAYER.ID] = 1
-  
-  local iRandom = ( GetTickCount() % 4 );
-  PLAYER.Pos = RandomSpawns[ iRandom ];
-  PLAYER.SetWeapon(iRandom); // [Pistol, Shutgun, Bat, 0 fist] Blame player not server 
-  
+onPlayerSpawned <- function(Player) { 
+  local PLAYER = LocatePlayer(Player) 
+  MessageInfoArray.[PLAYER.ID].AddMessage(false, PLAYER + " has spawned")
+    
   // Fix Me
   GetOnlineRank();
   FindRankPos( PLAYER );
  }
 	
 onJoinProcess <- function(PLAYER) { 
-   MessageOutput(PLAYER, "Welcome to the server")
+   MessageOutput(false, PLAYER + " is connecting to the server)
+   MessageInfoArray.append(PLAYER);  
+   MessageInfoArray.[PLAYER.ID].AddMessage(PLAYER, "Welcome to the server")
+
+
 }
 	
 onPlayerLeave <- function(PLAYER) { 
@@ -431,13 +401,10 @@ onVehicleEntered <- function(PLAYER, VEHICLE, SEAT ) {
   }
 }
 
-RandomSpawns <- [ Vector( 181.65, -470.1, 26.16 ), Vector( 414.4, -1389.5, 26.16 ), Vector( 68.09, -1547.3, 28.29 ), Vector( -16.11, -1018.3, 26.16 ) ];
-
 // Liberty Unleashed & VCMP event "onScriptLoad"
 LoadScript <- function() { 
   if ( MultiPlayer == "Liberty Unleashed" ) { 
    dofile("Scripts/Main/Multiplayer/Liberty-Unleashed.s");
-   dofile("Scripts/Main/Multiplayer/Vehicles.s");
 	  
    // Load Liberty!
    LoadVehicles();
@@ -464,14 +431,14 @@ function MessageOutput(Player, Text) {
 
 // Bind this function
 /* Yikes! [TODO]
-// LU function onPlayerMurder( Killer, Player, Weapon,  BodyPart)
+// LU function onPlayerMurder( Killer, Player, BodyPart)
 // VCMP onPlayerKill( killer, player, reason, bodypart ) 
   So LU stores Weapon in the parameters of onPlayerKill. 
   So we will make LU & VCMP pass over weapon names. 
 */
-function onPlayerKill( pKiller, pPlayer, iWeapon, iBodyPart )
+function onPlayerMurder( pKiller, pPlayer, iBodyPart )
 {
-	local szWeapon = GetWeaponName( iWeapon ), szBodyPart = GetBodyPartName( iBodyPart ) == "Unknown" ? "Body" : GetBodyPartName( iBodyPart );
+	local szWeapon = TargetWeapon(pKiller), szBodyPart = TargetBodyParts( iBodyPart );
 	Message( "** " + pKiller + " killed " + pPlayer + " (" + szWeapon + ") (" + szBodyPart + ")", Colour( 255, 0, 0 ) );
 	
 	/* Deal with the killer stuff */
@@ -560,7 +527,6 @@ function TempTimer() {
     // Car Time
     case 1:
     local time = FailTime;
-    SmallMessage("Time remaining: " + time, 1000 , 1 );
     MessageTime = 5;
     MessageID = 1;
     break;
