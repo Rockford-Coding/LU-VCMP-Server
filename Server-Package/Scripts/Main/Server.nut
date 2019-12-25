@@ -176,8 +176,9 @@ FreezePlayer <- class(player) {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 
 local SystemTimerArray = [];
-SystemTimer <- class(Player) { 
-  constructor(Player) {
+
+SystemTimer <- class() { 
+  constructor() {
     Timer = [];
   }
   function CreateTimer(INTERVAL, PLAYER, func) {
