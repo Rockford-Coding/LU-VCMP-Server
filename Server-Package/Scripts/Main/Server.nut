@@ -1,13 +1,3 @@
-  /*
-	Find all the TODOS in the script. 
-	
-	Branch out the script and prepare to remove
-	************"if (MultiPlayer....)"************
-	
-    Eliminate the timed methods and call "SystemTimers".
-    We will be soon creating timed events. Then adding the rest of the files to the server
-*/
-
 print("The script has initiated");
 
 /* Server statistics */
@@ -24,15 +14,6 @@ function RenameFunction(oldName, newName) {
     getroottable()[newName] <- getroottable()[oldName];
     getroottable().rawdelete(oldName);
 }
-
-if (MultiPlayer == "Liberty Unleashed") {
-  ::Color <- function(R, G, B) { return Colour( R, G, B ); }
-};
-
-else if (MultiPlayer == "Vice City MultiPlayer") {
-  ::Color <- function(R, G, B) { return RGB( R, G, B ); }
-};
-
 
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
@@ -225,43 +206,37 @@ SystemTimer <- class() {
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 local MessageInfoArray = [];  
-MessageInfo <- class(player) { 
-  constructor(Player) {
-    MessageStorage = [];
-    MessageTime = 0;
-    MessageID = 0;
-    Timer = ::NewTimer( "MessageUpdate", 1000, 0, player );
-  }
+MessageInfo <- class() { 
+  MessageStorage = [];
+  MessageTime = false;
+  MessageID = -1;
+  TypeOfMessage = "Text-Type"
   MessageUpdate <- function(Player) { 
-    local MyMessage = MessageInfoArray.find(Player.ID);
-
      // Message Time
-     if (MessageTime != 0 ) { 
-       Random_Message(Player, MessageID);
+     if (MessageTime != 0 ) {
+       // Decrease the time of the message if time is enabled
        MessageTime--;
+       // Get the message
+       GetMessage();
        if (MessageTime == 0 ) {
-         local number = ( GetTickCount() % 2 );
-         MessageID = number;
-         Random_Message(Player, number)
-         MessageTime = 5;
+         MessageTime = false;
        }
      }
   }
   AddMessage <- function(Text) { 
-
-    MessageStorage.push(Text)
+    MessageStorage.append(Text)
   };
   
-  GetMessage <- function() {  
-    SmallMessage(MessageInfo[MessageID], 1000 , 1 )
+  GetMessage <- function(TYPE) {  
+    onScreenSmall3DText(MessageStorage[MessageID])
   };
   
   ClearMessages <- function() {
-    MessageInfo.clear();
+    MessageStorage.clear();
   };
   
   Next_Message <- function(iD) {
-    MessageID += iD;
+    MessageID++;
   };
   
 };
@@ -378,7 +353,14 @@ catch (e) {
  print("Everything is Fucked!!!!!!");
  // Nothing else will continue 
 }
+if (MultiPlayer == "Liberty Unleashed") {
+  ::Color <- function(R, G, B) { return Colour( R, G, B ); }
+};
 
+else if (MultiPlayer == "Vice City MultiPlayer") {
+  ::Color <- function(R, G, B) { return RGB( R, G, B ); }
+};
+	
 /*  
   Everything else has been binded in the Multiplayer scripts
   ["Liberty-Unleashed.nut", "Vice-City-Multiplayer.nut"]
