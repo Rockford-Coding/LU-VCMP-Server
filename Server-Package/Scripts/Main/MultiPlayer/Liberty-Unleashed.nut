@@ -305,3 +305,7 @@ function LocateVehicle(index) {
  }
  else return false;
 }
+function onScreenSmall3DText(3DMessage, 1000 , Player ) {
+  if (Player) SmallMessage(Player, 3DMessage, 1000 , 1 );
+  else SmallMessage(3DMessage, 1000 , 1 );
+}
