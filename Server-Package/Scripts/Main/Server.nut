@@ -186,17 +186,17 @@ SystemTimer <- class() {
     //Each mod will load it's own script. So use the same name on each each timer. 
     Timer.append(func, ::SetTimer(INTERVAL, func, PLAYER))
   }
-  function StopTimer(PLAYER, func) { 
-     Timer[func].Stop();	    
+  function StopTimer(func) { 
+     ::TimerStop(Timer[func]);	    
     }
   }
-  function StartTimer(PLAYER, func) { 
-      Timer[func].Start();	    
+  function StartTimer(func) { 
+     ::TimerStart(Timer[func]);	    
   }
   function DeleteTimer(PLAYER, func) { // PLAYER ever needed?
    if ( Timer.find(func) ) {
      // Timer is now gone from player
-     Timer[func].Delete(); // Timer instance	 
+     ::TimerClear(Timer[func]) // Timer instance	 
      Timer.remove(func) // Removal from array
 
      // Recalculate the players timer array to prevent it from growing in size
@@ -671,14 +671,14 @@ function onVehicleHealthMonitor() {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
-
+// UPDATE ME PLEASE
 BlimpInfo = [];
 function ClearBlips(Player) {
 	foreach (key, value in BlimpInfo) {
 	 local blimp = ::FindBlip(value)
 	 if (blimp) {
 	   blimp.Remove();
-       BlimpInfo.clear(); // Call back a func to mp script 
+           BlimpInfo.clear(); // Call back a func to mp script 
     }
   }
 }
@@ -687,6 +687,6 @@ function ClearBlips(Player) {
 // END OF CODE, CHANGING OVER TO NEXT SECTION  //
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 
-NewTimer("Timer_", 1000, 0);
+CreateTimer(1000, false, TempTimer)
 print( "[Loaded] " + ScriptName + " " + ScriptVersion );
 print( "Created By: " + Creator );
