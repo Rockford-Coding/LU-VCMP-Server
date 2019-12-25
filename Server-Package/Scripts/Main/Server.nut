@@ -76,7 +76,7 @@ GoToAreaPlayer <- class() {
   Active = false;
   Area = [];
 	    
-  Distance-+
+  Distance = null;
   function AddArea(X, Y, Z, Type, ) {
     if (Type == "Distamce"
       Area.apply(function(Type) {
