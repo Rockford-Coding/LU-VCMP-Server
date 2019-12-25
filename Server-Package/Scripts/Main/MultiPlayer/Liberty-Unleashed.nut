@@ -280,9 +280,28 @@ function SetTimer(Time, Function, Link) {
  else return NewTimer( Function, Time, 0, Link );
 }
 
+function StopTimer(Timer) { 
+  Timer.Stop();
+}
+ 
+function TimerStart(Timer) { 
+  Timer.Start();
+}
 
+function TimerDelete(Timer) { 
+  Timer.Clear();
+}
+// Return whatever else Identifier there is TODO
 function LocatePlayer(String) { 
  if (FindPlayer(String)) { 
   return FindPlayer(String);
  }
+ else return false;
+}
+
+function LocateVehicle(index) { 
+ if (FindVehicle(index)) { 
+  return FindVehicle(index);
+ }
+ else return false;
 }
