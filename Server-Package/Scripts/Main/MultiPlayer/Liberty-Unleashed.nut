@@ -293,18 +293,32 @@ function TimerDelete(Timer) {
 }
 // Return whatever else Identifier there is TODO
 function LocatePlayer(String) { 
- if (FindPlayer(String)) { 
-  return FindPlayer(String);
- }
- else return false;
+ function GetPlayer( target )
+{
+	target = target.tostring();
+	
+	if ( IsNum( target ) )
+	{
+		target = target.tointeger();
+		
+		if ( FindPlayer( target ) ) return FindPlayer( target );
+		else return false;
+	}
+	else if ( FindPlayer( target ) ) return FindPlayer( target );
+	else return false;
 }
 
-function LocateVehicle(index) { 
- if (FindVehicle(index)) { 
-  return FindVehicle(index);
- }
- else return false;
+function LocateVehicle(target) { 
+	target = target.tointeger();
+	
+ if ( FindVehicle( target ) ) return FindVehicle( target );
+	else return false;
 }
+/*
+  Example code
+  if (LocateVehicle(instance.ID)) onScreenSmall3DText("If vehicle, Vehicle ID returns " + LocateVehicle(instance.ID), 9000 , false );
+  // if the vehilce does not exist it'll return false. If not it will return the ID
+*/
 function onScreenSmall3DText(3DMessage, 1000 , Player ) {
   if (Player) SmallMessage(Player, 3DMessage, 1000 , 1 );
   else SmallMessage(3DMessage, 1000 , 1 );
