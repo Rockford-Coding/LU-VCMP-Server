@@ -635,6 +635,10 @@ CreateTimer(1000, false, TempTimer)
 print( "[Loaded] " + ScriptName + " " + ScriptVersion );
 print( "Created By: " + Creator );
 		 
-/*function AngleRotation( facing, heading) { 
-  if ( OldXVector > OldXVector || OldYVector > OldYVector ) 
-*/
+function AngleRotation( x, y) { 
+  DegreesToRadians(atan2(x, y))
+}
+function DegreesToRadians(deg) {
+    local rad = deg * PI / 180.0;
+    return rad;
+}
