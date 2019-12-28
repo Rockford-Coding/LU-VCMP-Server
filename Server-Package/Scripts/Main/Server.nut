@@ -1,3 +1,5 @@
+/* Forcing over to a server package by tommorow */
+
 print("The script has initiated");
 
 /* Server statistics */
@@ -366,6 +368,7 @@ onJoinProcess <- function(PLAYER) {
 onPlayerLeave <- function(PLAYER) { 
   players.rawdelete(PLAYER.Name);
 }
+		 
 // Bind this function
 onPlayerDied <- function(PLAYER) { 
   MessageOutput("Server", "** " + PLAYER + " has died.")
@@ -429,15 +432,7 @@ function MessageOutput(Player, Text) {
   }
 }
 
-// Bind this function
-/* Yikes! [TODO]
-// LU function onPlayerMurder( Killer, Player, BodyPart)
-// VCMP onPlayerKill( killer, player, reason, bodypart ) 
-  So LU stores Weapon in the parameters of onPlayerKill. 
-  So we will make LU & VCMP pass over weapon names. 
-*/
-function onPlayerMurder( pKiller, pPlayer, iBodyPart )
-{
+function onPlayerMurder( pKiller, pPlayer, iBodyPart ) {
 	local szWeapon = TargetWeapon(pKiller), szBodyPart = TargetBodyParts( iBodyPart );
 	Message( "** " + pKiller + " killed " + pPlayer + " (" + szWeapon + ") (" + szBodyPart + ")", Colour( 255, 0, 0 ) );
 	
@@ -640,5 +635,6 @@ CreateTimer(1000, false, TempTimer)
 print( "[Loaded] " + ScriptName + " " + ScriptVersion );
 print( "Created By: " + Creator );
 		 
-function AngleRotation( facing, heading) { 
+/*function AngleRotation( facing, heading) { 
   if ( OldXVector > OldXVector || OldYVector > OldYVector ) 
+*/
