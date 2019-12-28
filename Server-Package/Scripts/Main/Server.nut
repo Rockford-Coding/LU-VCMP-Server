@@ -1,7 +1,7 @@
 print("The script has initiated");
 
 /* Server statistics */
-MultiPlayer <- "GTA" 
+MultiPlayer <- "Mod" 
 GAME_MODE <- "Grand Theft Auto";
  
 const ScriptName = "Monopoly Wars";
@@ -51,7 +51,7 @@ Gamemode <- class() {
 	::GTA_RESET() // It's time
       }
       StartTime--;
-      ::SmallMessage("Failed, Restarting... " + StartTime, 1000 , 1 );
+      ::SmallMessage("Failed, Restarting... " + StartTime, 1000 , 1 ); // TODO
     }
     // Mission Restart
 };//GamemodePlayerArray.insert(player.ID, Mode);
@@ -488,12 +488,12 @@ function TempTimer() {
      if (player.Spawned) { 
 	 
        if (FrozenTime != 0) {
-       SmallMessage("Frozen for " + FrozenTime, 1000 , 1 );
-       if (FrozenTime == 0) {
-         Froze = false;
-	 Player.Frozen = true; // call back to mp for proper freeze
-       }
-        FrozenTime--;
+         onScreenSmall3DText("Frozen for " + FrozenTime)
+         if (FrozenTime == 0) {
+           Froze = false;
+	   Player.Frozen = true; // call back to mp for proper freeze
+         }
+         FrozenTime--;
        }  	   
        // Mission Failed
 	
@@ -522,22 +522,23 @@ function TempTimer() {
   }
 }
 	
-/*function Random_Message(player, iD) {
+function Random_Message(player, iD) {
   switch( iD ) {
     // Car Time
     case 1:
     local time = FailTime;
+    onScreenSmall3DText("Hurry you must finish in " + time)
     MessageTime = 5;
     MessageID = 1;
     break;
 	
     case 2:
-    SmallMessage("Vehicle Located in : [Not added yet]", 1000 , 1 );
+    onScreenSmall3DText("Vehicle Located in : [Not added yet]")
     MessageTime = 5;
     MessageID = 2;
     break;
   }
-}*/
+}
 
 
 class PlrScore
@@ -638,3 +639,6 @@ function ClearBlips(Player) {
 CreateTimer(1000, false, TempTimer)
 print( "[Loaded] " + ScriptName + " " + ScriptVersion );
 print( "Created By: " + Creator );
+		 
+function AngleRotation( facing, heading) { 
+  if ( OldXVector > OldXVector || OldYVector > OldYVector ) 
