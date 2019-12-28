@@ -632,7 +632,7 @@ function ClearBlips(Player) {
 //=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=//
 
 CreateTimer(1000, false, TempTimer)
-print( "[Loaded] " + ScriptName + " " + ScriptVersion );
+/*print( "[Loaded] " + ScriptName + " " + ScriptVersion );
 print( "Created By: " + Creator );
 		 
 function AngleRotation( x, y) { 
@@ -642,3 +642,4 @@ function DegreesToRadians(deg) {
     local rad = deg * PI / 180.0;
     return rad;
 }
+*/
